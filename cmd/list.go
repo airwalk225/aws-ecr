@@ -16,23 +16,10 @@ limitations under the License.
 package cmd
 
 import (
+	ecrbox "github.com/airwalk225/ecrbox/aws/ecr"
 	"github.com/aws/aws-sdk-go/service/ecr"
 	"github.com/spf13/cobra"
 )
-
-type Repository struct {
-	CreatedAt string
-	ImageScanningConfiguration ImageScanningConfiguration
-	ImageTagMutability string
-	RegistryId int
-	RepositoryArn string
-	RepositoryName string
-	RepositoryUri string
-}
-
-type ImageScanningConfiguration struct {
-	ScanOnPush bool
-}
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
@@ -40,15 +27,15 @@ var listCmd = &cobra.Command{
 	Short: "List ECR repositories",
 	Long: `List all the repositories that exist inside the AWS ECR provided.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		_ecr := NewECR(cnf.AWS.Session)
+		_ecr := ecrbox.NewECR(cnf.AWS.Session)
 		flt := &ecr.DescribeRepositoriesInput{}
-		res, err := getRepositories(_ecr, flt)
+		res, err := ecrbox.GetRepositories(_ecr, flt)
 
 		if err != nil {
-			_ecr.handleError(err, "repo list")
+			_ecr.HandleError(err, "repo list")
 		}
 
-		displayRepos(res)
+		ecrbox.DisplayRepos(res)
 	},
 }
 

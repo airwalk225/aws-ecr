@@ -18,5 +18,5 @@ package main
 import "github.com/airwalk225/ecrbox/cmd"
 
 func main() {
-  cmd.Execute()
+	cmd.Execute()
 }

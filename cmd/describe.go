@@ -16,9 +16,10 @@ limitations under the License.
 package cmd
 
 import (
+	ecrbox "github.com/airwalk225/ecrbox/aws/ecr"
 	"github.com/aws/aws-sdk-go/service/ecr"
 	"github.com/spf13/cobra"
-  "strings"
+	"strings"
 )
 
 var names string
@@ -30,7 +31,7 @@ var describeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var filterNames []*string
 
-		_ecr := NewECR(cnf.AWS.Session)
+		_ecr := ecrbox.NewECR(cnf.AWS.Session)
 
 		for _, name := range strings.Split(names, ",") {
 			filterNames = append(filterNames, &name)
@@ -40,20 +41,19 @@ var describeCmd = &cobra.Command{
 			RepositoryNames: filterNames,
 		}
 
-		res, err := getRepositories(_ecr, flt)
+		res, err := ecrbox.GetRepositories(_ecr, flt)
 
 		if err != nil {
-			_ecr.handleError(err, "repo describe")
+			_ecr.HandleError(err, "repo describe")
 		}
 
-		describeRepoInDepth(res)
+		ecrbox.DescribeRepoInDepth(res)
 	},
 }
 
 func init() {
 	repoCmd.AddCommand(describeCmd)
 
-	describeCmd.Flags().StringVarP(&names, "name", "n", "", "The name of the repository you would like to describe (required)" +
-		"can be a comma separated list")
-	describeCmd.MarkFlagRequired("name")
+	describeCmd.Flags().StringVarP(&names, "name", "n", "", "The name of the repository you would like to describe (required) - can be a comma separated list")
+	_ = describeCmd.MarkFlagRequired("name")
 }
