@@ -19,16 +19,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// repoCmd represents the repo command
-var repoCmd = &cobra.Command{
-	Use:   "repo",
-	Short: "Show all the commands for ECR repositories",
-	Long: `Show all the commands for an ECR repo, that can be run against AWS ECR.`,
+// imageCmd represents the image command
+var imageCmd = &cobra.Command{
+	Use:   "image",
+	Short: "Show all the commands for image",
+	Long: `Show all the commands for an ECR images, that can be run against AWS ECR.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO: Add in some nice text here to show which commands can be run
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(repoCmd)
+	rootCmd.AddCommand(imageCmd)
 }
